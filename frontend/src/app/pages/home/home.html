@@ -1,1 +1,17 @@
-<p>home works!</p>
+<section class="home">
+    <h1 class="home__title">Productos</h1>
+
+    @if (isLoading()) {
+    <app-loading />
+    } @else if (errorMessage()) {
+    <p class="home__error">{{ errorMessage() }}</p>
+    } @else if (products().length === 0) {
+    <p class="home__empty">No hay productos para mostrar.</p>
+    } @else {
+    <div class="home__grid">
+        @for (product of products(); track product.id) {
+        <app-product-card [product]="product" />
+        }
+    </div>
+    }
+</section>
