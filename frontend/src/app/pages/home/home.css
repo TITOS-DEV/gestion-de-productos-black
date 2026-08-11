@@ -27,3 +27,18 @@
     text-align: center;
     color: #888;
 }
+
+.navbar{
+    background-color: aquamarine;
+    text-align: center;
+    padding: 5px;
+    border-radius: 15px;
+}
+
+.navbar a{
+    text-decoration: none;
+    margin: 7px;
+    font-family: arial;
+    font-weight: bold;
+    color: #000000;
+}
