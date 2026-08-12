@@ -1,0 +1,19 @@
+.app-footer {
+    background-color: rgb(228, 228, 228);
+    padding: 15px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.footer-content p {
+    margin: 4px 0;
+    font-family: arial;
+    font-weight: 800;
+    color: rgb(0, 0, 0);
+}
+
+.footer-content p:last-child {
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: rgb(90, 90, 90);
+}
