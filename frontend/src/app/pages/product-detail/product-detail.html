@@ -1,1 +1,30 @@
-<p>product-detail works!</p>
+<section class="product-detail">
+    <a class="product-detail__back" routerLink="/">&larr; Volver</a>
+
+    @if (isLoading()) {
+    <app-loading />
+    } @else if (errorMessage()) {
+    <p class="product-detail__error">{{ errorMessage() }}</p>
+    } @else if (product(); as item) {
+    <div class="product-detail__content">
+        @if (item.images.length > 0) {
+        <img class="product-detail__img" [src]="item.images[0].url" [alt]="item.name" />
+        } @else {
+        <div class="product-detail__img product-detail__img--empty">Sin imagen</div>
+        }
+
+        <div class="product-detail__info">
+            <p class="product-detail__category">{{ item.category.name }}</p>
+            <h1 class="product-detail__name">{{ item.name }}</h1>
+            <p class="product-detail__price">{{ item.price | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+            <p class="product-detail__description">{{ item.description || 'Sin descripción.' }}</p>
+
+            @if (item.stock > 0) {
+            <span class="product-detail__stock">{{ item.stock }} disponibles</span>
+            } @else {
+            <span class="product-detail__stock product-detail__stock--out">Agotado</span>
+            }
+        </div>
+    </div>
+    }
+</section>

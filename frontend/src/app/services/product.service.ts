@@ -14,11 +14,15 @@ export class ProductService {
    * La API responde paginado: { data, total, page, limit, totalPages }.
    * Los productos están en la propiedad "data", no en la raíz.
    */
-  getAll(search?: string) {
+  getAll(search?: string, categoryId?: string) {
     let params = new HttpParams().set('limit', '50');
 
     if (search?.trim()) {
       params = params.set('search', search.trim());
+    }
+
+    if (categoryId) {
+      params = params.set('categoryId', categoryId);
     }
 
     return this.http.get<PaginatedProducts>(`${this.apiUrl}/products`, { params });

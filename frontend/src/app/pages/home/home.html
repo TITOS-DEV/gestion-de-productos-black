@@ -1,12 +1,33 @@
 <section class="home">
     <h1 class="home__title">Productos</h1>
 
+    @if (categories().length > 0) {
+    <div class="home__categories">
+        <button
+            class="home__category-btn"
+            [class.home__category-btn--active]="!selectedCategoryId()"
+            (click)="filterByCategory('')"
+        >
+            Todas
+        </button>
+        @for (category of categories(); track category.id) {
+        <button
+            class="home__category-btn"
+            [class.home__category-btn--active]="selectedCategoryId() === category.id"
+            (click)="filterByCategory(category.id)"
+        >
+            {{ category.name }}
+        </button>
+        }
+    </div>
+    }
+
     @if (isLoading()) {
     <app-loading />
     } @else if (errorMessage()) {
     <p class="home__error">{{ errorMessage() }}</p>
     } @else if (products().length === 0) {
-    <p class="home__empty">No hay productos para mostrar.</p>
+    <p class="home__empty">{{ emptyMessage() }}</p>
     } @else {
     <div class="home__grid">
         @for (product of products(); track product.id) {

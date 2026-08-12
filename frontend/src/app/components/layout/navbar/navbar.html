@@ -6,6 +6,8 @@
         <a routerLink="/favorites">Favoritos</a>
         <a routerLink="/admin/products">Productos</a>
 
+    <app-search-bar (search)="onSearch($event)" />
+
     <div class="auth-nav">
         <a routerLink="/login">Iniciar Sesion</a>
     </div>

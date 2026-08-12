@@ -9,6 +9,33 @@
     font-size: 1.75rem;
 }
 
+.home__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.home__category-btn {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    background: #fff;
+    color: #333;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.home__category-btn:hover {
+    background: #f2f2f2;
+}
+
+.home__category-btn--active {
+    background: #333;
+    color: #fff;
+    border-color: #333;
+}
+
 .home__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -26,19 +53,4 @@
     padding: 3rem 1rem;
     text-align: center;
     color: #888;
-}
-
-.navbar{
-    background-color: aquamarine;
-    text-align: center;
-    padding: 5px;
-    border-radius: 15px;
-}
-
-.navbar a{
-    text-decoration: none;
-    margin: 7px;
-    font-family: arial;
-    font-weight: bold;
-    color: #000000;
 }

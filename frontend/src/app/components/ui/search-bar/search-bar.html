@@ -1,1 +1,10 @@
-<p>search-bar works!</p>
+<form class="search-bar" (ngSubmit)="onSubmit()">
+    <input
+        class="search-bar__input"
+        type="text"
+        name="search"
+        placeholder="Buscar productos..."
+        [(ngModel)]="searchTerm"
+    />
+    <button class="search-bar__button" type="submit">Buscar</button>
+</form>
