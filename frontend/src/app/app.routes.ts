@@ -2,29 +2,23 @@
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
 import { ProductDetail } from './pages/product-detail/product-detail';
-import { LoginComponent } from './pages/login/login';
-import { RegisterComponent } from './pages/register/register';
 import { Products } from './pages/products/products';
 import { Categories } from './pages/categories/categories';
 import { Favorites } from './pages/favorites/favorites';
 import { Profile } from './pages/profile/profile';
-// import { authGuard } from './guards/auth.guard';
-// ↑ lo activa A cuando el guard esté implementado
+import { authGuard } from './guards/auth.guard'; // ← ya activo
 
 export const routes: Routes = [
-  // ── Rutas públicas ──
+  // — Rutas públicas —
   { path: '', component: Home },
   { path: 'products/:id', component: ProductDetail },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
 
-  // ── Rutas protegidas ──
-  // canActivate: [authGuard] lo conecta A en su commit del guard
-  { path: 'admin/products', component: Products },
-  { path: 'categories', component: Categories },
-  { path: 'favorites', component: Favorites },
-  { path: 'profile', component: Profile },
+  // — Rutas protegidas —
+  { path: 'admin/products', component: Products, canActivate: [authGuard] },
+  { path: 'categories', component: Categories, canActivate: [authGuard] },
+  { path: 'favorites', component: Favorites, canActivate: [authGuard] },
+  { path: 'profile', component: Profile, canActivate: [authGuard] },
 
-  // ── Fallback ──
+  // — Fallback —
   { path: '**', redirectTo: '' },
 ];

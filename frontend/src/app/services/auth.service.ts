@@ -71,6 +71,6 @@ export class AuthService {
   private clearSession() {
     localStorage.removeItem('accessToken');
     this.isLoggedIn.set(false);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

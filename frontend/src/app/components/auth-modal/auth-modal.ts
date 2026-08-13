@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../services/modal.service';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 /**
  * Componente que representa la ventana modal de autenticación.
@@ -16,7 +17,7 @@ import { AuthService } from '../../services/auth.service';
 export class AuthModal {
   modal = inject(ModalService);
   private authService = inject(AuthService);
-
+  private router = inject(Router);
   // Variables enlazadas al formulario mediante ngModel
   loginEmail = '';
   loginPassword = '';
@@ -65,23 +66,27 @@ export class AuthModal {
    * Maneja el envío del formulario de inicio de sesión.
    */
   onLoginSubmit() {
-    if (!this.loginEmail || !this.loginPassword) {
-      this.errorMessage = 'Debes completar email y contraseña';
-      return;
-    }
-    this.authService.login(this.loginEmail, this.loginPassword).subscribe({
-      next: () => {
-        this.loginEmail = '';
-        this.loginPassword = '';
-        this.close();
-      },
-      error: (err) => {
-        this.errorMessage = 'Email o contraseña incorrectos';
-        console.error(err);
-      },
-    });
+  if (!this.loginEmail || !this.loginPassword) {
+    this.errorMessage = 'Debes completar email y contraseña';
+    return;
   }
-
+  this.authService.login(this.loginEmail, this.loginPassword).subscribe({
+    next: () => {
+      const returnUrl = this.modal.returnUrl;
+      this.loginEmail = '';
+      this.loginPassword = '';
+      this.modal.returnUrl = null;
+      this.close();
+      if (returnUrl) {
+        this.router.navigate([returnUrl]);
+      }
+    },
+    error: (err) => {
+      this.errorMessage = 'Email o contraseña incorrectos';
+      console.error(err);
+    },
+  });
+}
   /**
    * Maneja el envío del formulario de registro.
    */

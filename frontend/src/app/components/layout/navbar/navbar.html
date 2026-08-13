@@ -9,7 +9,10 @@
     <app-search-bar (search)="onSearch($event)" />
 
    <div class="auth-nav">
-  <button type="button" (click)="modal.openLogin()">Iniciar Sesion</button>
-
+  @if (auth.isLoggedIn()) {
+    <button type="button" (click)="auth.logout()">Cerrar sesión</button>
+  } @else {
+    <button type="button" (click)="modal.openLogin()">Iniciar Sesion</button>
+  }
 </div>
 </nav>
