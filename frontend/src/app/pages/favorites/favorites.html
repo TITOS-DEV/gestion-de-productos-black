@@ -1,1 +1,19 @@
-<p>favorites works!</p>
+<section class="favorites">
+    <h1 class="favorites__title">Mis favoritos</h1>
+
+    @if (!isLoggedIn()) {
+    <p class="favorites__empty">Inicia sesión para ver tus productos favoritos.</p>
+    } @else if (isLoading()) {
+    <app-loading />
+    } @else if (errorMessage()) {
+    <p class="favorites__error">{{ errorMessage() }}</p>
+    } @else if (products().length === 0) {
+    <p class="favorites__empty">Todavía no tienes productos favoritos.</p>
+    } @else {
+    <div class="favorites__grid">
+        @for (product of products(); track product.id) {
+        <app-product-card [product]="product" />
+        }
+    </div>
+    }
+</section>

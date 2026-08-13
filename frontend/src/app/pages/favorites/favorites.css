@@ -1,0 +1,29 @@
+.favorites {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.favorites__title {
+    margin: 0 0 1.5rem;
+    font-size: 1.75rem;
+}
+
+.favorites__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.25rem;
+}
+
+.favorites__error {
+    padding: 1rem;
+    border-radius: 6px;
+    background: #ffebee;
+    color: #c62828;
+}
+
+.favorites__empty {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: #888;
+}
