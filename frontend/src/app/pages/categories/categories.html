@@ -1,1 +1,22 @@
-<p>categories works!</p>
+<section class="categories">
+    <h1 class="categories__title">Categorías</h1>
+
+    @if (isLoading()) {
+    <app-loading />
+    } @else if (errorMessage()) {
+    <p class="categories__error">{{ errorMessage() }}</p>
+    } @else if (categories().length === 0) {
+    <p class="categories__empty">No hay categorías para mostrar.</p>
+    } @else {
+    <div class="categories__grid">
+        @for (category of categories(); track category.id) {
+        <button class="categories__card" type="button" (click)="goToProducts(category.id)">
+            <span class="categories__name">{{ category.name }}</span>
+            @if (category.description) {
+            <span class="categories__description">{{ category.description }}</span>
+            }
+        </button>
+        }
+    </div>
+    }
+</section>
