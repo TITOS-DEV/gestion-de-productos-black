@@ -9,7 +9,7 @@ import { AuthResponse } from '../models/auth-response.model';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = 'http://localhost:3001';
 
   /**
    * Señal reactiva del estado de sesión.

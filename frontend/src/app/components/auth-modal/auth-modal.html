@@ -1,0 +1,66 @@
+<!-- Se renderiza el modal solo si el servicio indica que está abierto -->
+@if (modal.isOpen()) {
+  <!-- Fondo oscuro del modal; si se hace clic en él, se cierra -->
+  <div class="modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="modal-card">
+      <button class="modal-close" type="button" (click)="close()" aria-label="Cerrar">&times;</button>
+
+      <!-- Pestañas para alternar entre Login y Register -->
+      <div class="modal-tabs">
+        <button type="button" class="modal-tab" [class.active]="view === 'login'" (click)="switchView('login')">
+          Iniciar sesión
+        </button>
+        <button type="button" class="modal-tab" [class.active]="view === 'register'" (click)="switchView('register')">
+          Crear cuenta
+        </button>
+      </div>
+
+      <!-- Formulario de Inicio de Sesión -->
+      @if (view === 'login') {
+        <form (ngSubmit)="onLoginSubmit()" class="modal-form">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" [(ngModel)]="loginEmail" name="loginEmail" required />
+
+          <label for="login-password">Contraseña</label>
+          <input id="login-password" type="password" [(ngModel)]="loginPassword" name="loginPassword" required />
+
+          @if (errorMessage) {
+            <p class="modal-error">{{ errorMessage }}</p>
+          }
+
+          <button type="submit" class="modal-submit">Iniciar sesión</button>
+
+          <p class="modal-switch">
+            ¿No tienes cuenta?
+            <button type="button" class="modal-link" (click)="switchView('register')">Regístrate aquí</button>
+          </p>
+        </form>
+      }
+
+      <!-- Formulario de Registro -->
+      @if (view === 'register') {
+        <form (ngSubmit)="onRegisterSubmit()" class="modal-form">
+          <label for="register-name">Nombre</label>
+          <input id="register-name" type="text" [(ngModel)]="registerName" name="registerName" required />
+
+          <label for="register-email">Email</label>
+          <input id="register-email" type="email" [(ngModel)]="registerEmail" name="registerEmail" required />
+
+          <label for="register-password">Contraseña</label>
+          <input id="register-password" type="password" [(ngModel)]="registerPassword" name="registerPassword" required />
+
+          @if (errorMessage) {
+            <p class="modal-error">{{ errorMessage }}</p>
+          }
+
+          <button type="submit" class="modal-submit">Registrarse</button>
+
+          <p class="modal-switch">
+            ¿Ya tienes cuenta?
+            <button type="button" class="modal-link" (click)="switchView('login')">Inicia sesión aquí</button>
+          </p>
+        </form>
+      }
+    </div>
+  </div>
+}

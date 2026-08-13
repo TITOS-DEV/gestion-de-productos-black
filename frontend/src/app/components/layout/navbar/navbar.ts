@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { SearchBar } from '../../ui/search-bar/search-bar';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,8 +11,8 @@ import { SearchBar } from '../../ui/search-bar/search-bar';
 })
 export class Navbar {
   private router = inject(Router);
+  modal = inject(ModalService);
 
-  // El home lee "search" de la query param para filtrar el listado.
   onSearch(term: string): void {
     this.router.navigate(['/'], { queryParams: { search: term || null } });
   }
