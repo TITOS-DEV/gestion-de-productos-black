@@ -24,6 +24,19 @@
             } @else {
             <span class="product-detail__stock product-detail__stock--out">Agotado</span>
             }
+
+            <button
+                class="product-detail__favorite-btn"
+                [class.product-detail__favorite-btn--active]="isFavorite()"
+                type="button"
+                (click)="toggleFavorite()"
+            >
+                {{ isFavorite() ? '♥ En favoritos' : '♡ Agregar a favoritos' }}
+            </button>
+
+            @if (favoriteError()) {
+            <p class="product-detail__favorite-error">{{ favoriteError() }}</p>
+            }
         </div>
     </div>
     }

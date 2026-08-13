@@ -2,6 +2,9 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { ProductService } from '../../services/product.service';
+import { FavoriteService } from '../../services/favorite.service';
+import { AuthService } from '../../services/auth.service';
+import { ModalService } from '../../services/modal.service';
 import { Product } from '../../models/product.model';
 import { Loading } from '../../components/ui/loading/loading';
 
@@ -14,10 +17,16 @@ import { Loading } from '../../components/ui/loading/loading';
 export class ProductDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private productService = inject(ProductService);
+  private favoriteService = inject(FavoriteService);
+  private authService = inject(AuthService);
+  private modalService = inject(ModalService);
 
   product = signal<Product | null>(null);
   isLoading = signal(false);
   errorMessage = signal('');
+
+  isFavorite = signal(false);
+  favoriteError = signal('');
 
   /** Se ejecuta una vez cuando Angular termina de crear el componente. */
   ngOnInit(): void {
@@ -28,6 +37,31 @@ export class ProductDetail implements OnInit {
     }
   }
 
+  /**
+   * Agrega o quita el producto de favoritos según su estado actual.
+   * Si el usuario no ha iniciado sesión, abre el modal de login en vez
+   * de llamar a la API (el endpoint requiere JWT).
+   */
+  toggleFavorite(): void {
+    if (!this.authService.isLoggedIn()) {
+      this.modalService.openLogin();
+      return;
+    }
+
+    const item = this.product();
+    if (!item) return;
+
+    this.favoriteError.set('');
+    const request = this.isFavorite()
+      ? this.favoriteService.remove(item.id)
+      : this.favoriteService.add(item.id);
+
+    request.subscribe({
+      next: () => this.isFavorite.set(!this.isFavorite()),
+      error: () => this.favoriteError.set('No se pudo actualizar favoritos. Intenta de nuevo.'),
+    });
+  }
+
   private loadProduct(id: string): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
@@ -36,11 +70,22 @@ export class ProductDetail implements OnInit {
       next: (product) => {
         this.product.set(product);
         this.isLoading.set(false);
+        this.checkFavoriteStatus(id);
       },
       error: () => {
         this.errorMessage.set('No se pudo cargar el producto. Intenta de nuevo.');
         this.isLoading.set(false);
       },
+    });
+  }
+
+  /** Consulta si este producto ya está en los favoritos del usuario, para pintar el botón correcto. */
+  private checkFavoriteStatus(productId: string): void {
+    if (!this.authService.isLoggedIn()) return;
+
+    this.favoriteService.getAll().subscribe({
+      next: (favorites) => this.isFavorite.set(favorites.some((p) => p.id === productId)),
+      error: () => {}, // si falla, el botón simplemente arranca en "no favorito"
     });
   }
 }

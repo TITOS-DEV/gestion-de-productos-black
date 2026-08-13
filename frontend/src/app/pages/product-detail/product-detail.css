@@ -79,6 +79,34 @@
     color: #c62828;
 }
 
+.product-detail__favorite-btn {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+    color: #333;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.product-detail__favorite-btn:hover {
+    background: #f2f2f2;
+}
+
+.product-detail__favorite-btn--active {
+    background: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+.product-detail__favorite-error {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #c62828;
+}
+
 .product-detail__error {
     padding: 1rem;
     border-radius: 6px;
