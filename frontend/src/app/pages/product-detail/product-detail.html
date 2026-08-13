@@ -25,6 +25,7 @@
             <span class="product-detail__stock product-detail__stock--out">Agotado</span>
             }
 
+            @if (isLoggedIn()) {
             <button
                 class="product-detail__favorite-btn"
                 [class.product-detail__favorite-btn--active]="isFavorite()"
@@ -36,6 +37,7 @@
 
             @if (favoriteError()) {
             <p class="product-detail__favorite-error">{{ favoriteError() }}</p>
+            }
             }
         </div>
     </div>

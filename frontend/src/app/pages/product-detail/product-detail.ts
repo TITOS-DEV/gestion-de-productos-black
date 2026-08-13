@@ -4,7 +4,6 @@ import { CurrencyPipe } from '@angular/common';
 import { ProductService } from '../../services/product.service';
 import { FavoriteService } from '../../services/favorite.service';
 import { AuthService } from '../../services/auth.service';
-import { ModalService } from '../../services/modal.service';
 import { Product } from '../../models/product.model';
 import { Loading } from '../../components/ui/loading/loading';
 
@@ -19,7 +18,6 @@ export class ProductDetail implements OnInit {
   private productService = inject(ProductService);
   private favoriteService = inject(FavoriteService);
   private authService = inject(AuthService);
-  private modalService = inject(ModalService);
 
   product = signal<Product | null>(null);
   isLoading = signal(false);
@@ -27,6 +25,9 @@ export class ProductDetail implements OnInit {
 
   isFavorite = signal(false);
   favoriteError = signal('');
+
+  // La plantilla la usa para ocultar el botón de favoritos sin sesión iniciada.
+  isLoggedIn = this.authService.isLoggedIn;
 
   /** Se ejecuta una vez cuando Angular termina de crear el componente. */
   ngOnInit(): void {
@@ -39,15 +40,10 @@ export class ProductDetail implements OnInit {
 
   /**
    * Agrega o quita el producto de favoritos según su estado actual.
-   * Si el usuario no ha iniciado sesión, abre el modal de login en vez
-   * de llamar a la API (el endpoint requiere JWT).
+   * El botón solo se muestra con sesión iniciada, así que no hace
+   * falta validar eso aquí (ver isLoggedIn en la plantilla).
    */
   toggleFavorite(): void {
-    if (!this.authService.isLoggedIn()) {
-      this.modalService.openLogin();
-      return;
-    }
-
     const item = this.product();
     if (!item) return;
 
