@@ -1,22 +1,61 @@
 <section class="categories">
-    <h1 class="categories__title">Categorías</h1>
+    <div class="categories__header">
+        <h1 class="categories__title">Categorías</h1>
+        <button class="btn btn-primary" type="button" (click)="openCreateForm()">+ Nueva Categoría</button>
+    </div>
+
+    <!-- Bloque para mostrar mensajes de error (400, 404, 409) -->
+    @if (errorMessage()) {
+        <div class="alert alert-danger">
+            <span class="alert-text">{{ errorMessage() }}</span>
+            <button class="alert-close" type="button" (click)="errorMessage.set('')">✕</button>
+        </div>
+    }
+
+    <!-- Formulario Modal para crear o editar categorias -->
+    @if (showForm()) {
+        <div class="modal-backdrop">
+            <div class="modal-content">
+                <h2>{{ isEditing() ? 'Editar Categoría' : 'Nueva Categoría' }}</h2>
+                <form (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label for="catName">Nombre *</label>
+                        <input id="catName" type="text" [(ngModel)]="name" name="name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="catDesc">Descripción</label>
+                        <textarea id="catDesc" [(ngModel)]="description" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
 
     @if (isLoading()) {
-    <app-loading />
-    } @else if (errorMessage()) {
-    <p class="categories__error">{{ errorMessage() }}</p>
+        <app-loading />
     } @else if (categories().length === 0) {
-    <p class="categories__empty">No hay categorías para mostrar.</p>
+        <p class="categories__empty">No hay categorías para mostrar.</p>
     } @else {
-    <div class="categories__grid">
-        @for (category of categories(); track category.id) {
-        <button class="categories__card" type="button" (click)="goToProducts(category.id)">
-            <span class="categories__name">{{ category.name }}</span>
-            @if (category.description) {
-            <span class="categories__description">{{ category.description }}</span>
+        <!-- Listado de categorias usando @for y track (Día 2 C) -->
+        <div class="categories__grid">
+            @for (category of categories(); track category.id) {
+                <div class="categories__card" (click)="goToProducts(category.id)">
+                    <div class="categories__card-info">
+                        <span class="categories__name">{{ category.name }}</span>
+                        @if (category.description) {
+                            <span class="categories__description">{{ category.description }}</span>
+                        }
+                    </div>
+                    <div class="categories__card-actions">
+                        <button type="button" class="btn-action btn-edit" (click)="openEditForm(category, $event)">✏️ Editar</button>
+                        <button type="button" class="btn-action btn-delete" (click)="onDelete(category.id, $event)">🗑️ Borrar</button>
+                    </div>
+                </div>
             }
-        </button>
-        }
-    </div>
+        </div>
     }
 </section>

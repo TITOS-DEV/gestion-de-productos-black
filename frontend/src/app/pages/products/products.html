@@ -1,1 +1,106 @@
-<p>products works!</p>
+<section class="products-admin">
+    <div class="products-admin__header">
+        <h1>Administración de Productos</h1>
+        <button class="btn btn-primary" type="button" (click)="openCreateForm()">+ Agregar Producto</button>
+    </div>
+
+    <!-- Bloque para mostrar mensajes de error (400, 404, 409) (Día 3 C) -->
+    @if (errorMessage()) {
+        <div class="alert alert-danger">
+            <span class="alert-text">{{ errorMessage() }}</span>
+            <button class="alert-close" type="button" (click)="errorMessage.set('')">✕</button>
+        </div>
+    }
+
+    <!-- Formulario Modal para crear y editar productos (Día 2 C & Día 3 C) -->
+    @if (showForm()) {
+        <div class="modal-backdrop">
+            <div class="modal-content">
+                <h2>{{ isEditing() ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+                <form (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label for="prodName">Nombre *</label>
+                        <input id="prodName" type="text" [(ngModel)]="name" name="name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="prodDesc">Descripción</label>
+                        <textarea id="prodDesc" [(ngModel)]="description" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prodPrice">Precio ($) *</label>
+                            <input id="prodPrice" type="number" [(ngModel)]="price" name="price" required min="0" />
+                        </div>
+                        <div class="form-group">
+                            <label for="prodStock">Stock *</label>
+                            <input id="prodStock" type="number" [(ngModel)]="stock" name="stock" required min="0" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="prodCat">Categoría *</label>
+                        <select id="prodCat" [(ngModel)]="categoryId" name="categoryId" required>
+                            <option value="">Selecciona una categoría</option>
+                            @for (cat of categories(); track cat.id) {
+                                <option [value]="cat.id">{{ cat.name }}</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="prodImg">URL de Imagen</label>
+                        <input id="prodImg" type="text" [(ngModel)]="imageUrl" name="imageUrl" placeholder="http://ejemplo.com/imagen.jpg" />
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+
+    @if (isLoading()) {
+        <app-loading />
+    } @else {
+        <!-- Tabla de productos con @for y track (Día 2 C) -->
+        <div class="table-responsive">
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Categoría</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (product of products(); track product.id) {
+                        <tr>
+                            <td>
+                                <!-- Muestra la primera imagen de la galeria o un placeholder si no tiene -->
+                                <img [src]="product.images[0]?.url || 'assets/placeholder.jpg'" 
+                                     alt="{{ product.name }}" class="product-img-thumbnail" 
+                                     onerror="this.src='https://placehold.co/100x100?text=No+Img'" />
+                            </td>
+                            <td><strong>{{ product.name }}</strong></td>
+                            <td>${{ product.price }}</td>
+                            <td>{{ product.stock }} u.</td>
+                            <td>{{ product.category?.name || 'Sin Categoría' }}</td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn btn-edit" type="button" (click)="openEditForm(product)">✏️</button>
+                                    <button class="btn btn-delete" type="button" (click)="onDelete(product.id)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    } @empty {
+                        <tr>
+                            <td colspan="6" class="text-center">No hay productos disponibles.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

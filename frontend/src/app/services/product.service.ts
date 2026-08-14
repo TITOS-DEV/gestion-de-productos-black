@@ -32,4 +32,20 @@ export class ProductService {
   getById(id: string) {
     return this.http.get<Product>(`${this.apiUrl}/products/${id}`);
   }
+
+  /** POST /products — enviamos los datos para crear un nuevo producto */
+  create(productData: any) {
+    return this.http.post<Product>(`${this.apiUrl}/products`, productData);
+  }
+
+  /** PATCH /products/:id — actualizamos los datos de un producto especifico usando su id */
+  update(id: string, productData: any) {
+    return this.http.patch<Product>(`${this.apiUrl}/products/${id}`, productData);
+  }
+
+  /** DELETE /products/:id — eliminamos un producto del backend usando su id */
+  delete(id: string) {
+    return this.http.delete<void>(`${this.apiUrl}/products/${id}`);
+  }
 }
+

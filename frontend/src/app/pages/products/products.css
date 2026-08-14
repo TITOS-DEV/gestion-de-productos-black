@@ -1,0 +1,136 @@
+.products-admin {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.products-admin__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.products-admin__header h1 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+/* Tabla Administrativa */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background: var(--card-bg);
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.products-table th,
+.products-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
+  vertical-align: middle;
+}
+
+.products-table th {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.products-table tr:last-child td {
+  border-bottom: none;
+}
+
+.products-table tr:hover td {
+  background-color: rgba(0, 0, 0, 0.01);
+}
+
+.product-img-thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table-actions .btn {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+/* Responsividad para la tabla y cabecera (Día 4 C) */
+@media (max-width: 768px) {
+  .products-admin {
+    padding: 1rem;
+  }
+
+  .products-admin__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .products-admin__header button {
+    width: 100%;
+  }
+
+  /* Transformar tabla a vista de tarjetas en pantallas muy pequeñas */
+  @media (max-width: 576px) {
+    .products-table thead {
+      display: none; /* Esconde cabecera */
+    }
+    
+    .products-table, 
+    .products-table tbody, 
+    .products-table tr, 
+    .products-table td {
+      display: block;
+      width: 100%;
+    }
+
+    .products-table tr {
+      margin-bottom: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 0.5rem;
+      background: #fff;
+    }
+
+    .products-table td {
+      border-bottom: 1px dashed var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+    }
+
+    .products-table td:last-child {
+      border-bottom: none;
+    }
+
+    /* Agregamos etiquetas falsas antes de los valores */
+    .products-table td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      font-size: 0.85rem;
+      color: var(--secondary-color);
+    }
+  }
+}
