@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core'; // nos deja conectar los com
 import { HttpClient } from '@angular/common/http'; // nos da los metodos par poder comunicarnos con el backend y hacer la peticiones 
 import { Observable } from 'rxjs'; // sacamos de la libreria rxjs es un canal que que esta escuchando cuando los datos vayan a llegar del backend
 import { Category } from '../models/category.model'; // importamos el modelo para tipar los datos fuertemente
-import { environment } from '../../../environments/environment'; // configuracion de credenciales
+import { environment } from '../../environments/environment'; // configuracion de credenciales
 
 @Injectable({
   providedIn: 'root' // crea una sola copia del servicio para toda la aplicacion 

@@ -82,7 +82,7 @@
                             <td><strong>{{ product.name }}</strong></td>
                             <td>${{ product.price }}</td>
                             <td>{{ product.stock }} u.</td>
-                            <td>{{ product.category?.name || 'Sin Categoría' }}</td>
+                            <td>{{ product.category.name || 'Sin Categoría' }}</td>
                             <td>
                                 <div class="table-actions">
                                     <button class="btn btn-edit" type="button" (click)="openEditForm(product)">✏️</button>
