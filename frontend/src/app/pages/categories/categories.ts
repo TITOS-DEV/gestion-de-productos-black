@@ -13,75 +13,69 @@ import { AuthService } from '../../services/auth.service'; // inyectamos el serv
   styleUrl: './categories.css',
 })
 export class Categories implements OnInit {
-  private categoryService = inject(CategoryService); // inyectamos el servicio usando inject() (Angular 16+)
-  private router = inject(Router); // inyectamos el router de Angular para redirigir
-  private authService = inject(AuthService); // inyectamos el servicio de autenticacion
+  private categoryService = inject(CategoryService);
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
-  /** Señal derivada: true si el usuario es admin */
   isAdmin = this.authService.isAdmin;
 
-  categories = signal<Category[]>([]); // signal que almacena la lista completa de categorias
-  isLoading = signal(false); // signal para controlar si estamos cargando datos o no
-  errorMessage = signal(''); // signal para almacenar y mostrar mensajes de error
+  categories = signal<Category[]>([]); //almacena la lista categorias
+  isLoading = signal(false);
+  errorMessage = signal('');
 
-  // Variables de control para los formularios
-  showForm = signal(false); // controla si el formulario modal se muestra o no
-  isEditing = signal(false); // indica si el formulario actual es de edicion (true) o de creacion (false)
-  currentCategoryId = signal<string | null>(null); // guarda el id de la categoria que estamos editando en el momento
 
-  // Variables enlazadas con los inputs del formulario usando two-way binding (ngModel)
-  name = signal(''); // nombre de la categoria en el formulario
-  description = signal(''); // descripcion de la categoria en el formulario
+  showForm = signal(false); // mostrar modal
+  isEditing = signal(false); // si es formulario de edicion o de creacin
+  currentCategoryId = signal<string | null>(null); // id
 
-  /** Se ejecuta automaticamente cuando Angular inicializa el componente */
+
+  name = signal('');
+  description = signal('');
+
+
   ngOnInit(): void {
     this.loadCategories();
   }
 
-  /** Carga todas las categorias haciendo la peticion GET */
+  // Carga las categorias haciendo  get 
   loadCategories(): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
     this.categoryService.getAll().subscribe({
       next: (data) => {
-        this.categories.set(data); // guardamos los datos de las categorias en nuestro signal
-        this.isLoading.set(false); // apagamos la animacion de carga
+        this.categories.set(data);
       },
       error: (err) => {
-        this.handleError(err); // controlamos el error si falla la llamada
+        this.handleError(err);
         this.isLoading.set(false);
       },
     });
   }
 
-  /** Abre el formulario limpio en modo "Creacion" */
   openCreateForm() {
     this.isEditing.set(false);
     this.currentCategoryId.set(null);
     this.name.set('');
     this.description.set('');
-    this.errorMessage.set(''); // limpiamos errores previos
-    this.showForm.set(true); // mostramos el formulario
+    this.errorMessage.set('');
+    this.showForm.set(true);
   }
 
-  /** Abre el formulario con los datos cargados en modo "Edicion" */
   openEditForm(category: Category, event: Event) {
-    event.stopPropagation(); // evita que el click ejecute tambien goToProducts() al clickear la tarjeta
+    event.stopPropagation();
     this.isEditing.set(true);
     this.currentCategoryId.set(category.id);
     this.name.set(category.name);
     this.description.set(category.description || '');
-    this.errorMessage.set(''); // limpiamos errores previos
-    this.showForm.set(true); // mostramos el formulario
+    this.errorMessage.set('');
+    this.showForm.set(true);
   }
 
-  /** Cierra el formulario restableciendo su estado */
   closeForm() {
     this.showForm.set(false);
   }
 
-  /** Se llama al enviar el formulario (Crear o Editar) */
   onSubmit() {
     const payload = {
       name: this.name(),
@@ -89,53 +83,48 @@ export class Categories implements OnInit {
     };
 
     if (this.isEditing()) {
-      // EDITAR CATEGORIA (PATCH)
       this.categoryService.update(this.currentCategoryId()!, payload).subscribe({
         next: () => {
-          this.loadCategories(); // recarga la lista para ver los cambios
-          this.closeForm(); // cierra el formulario
+          this.loadCategories();
+          this.closeForm();
         },
-        error: (err) => this.handleError(err), // maneja errores (ej. nombre duplicado 409)
+        error: (err) => this.handleError(err),
       });
     } else {
-      // CREAR CATEGORIA (POST)
       this.categoryService.create(payload).subscribe({
         next: () => {
-          this.loadCategories(); // recarga la lista con la nueva categoria
-          this.closeForm(); // cierra el formulario
-        },
-        error: (err) => this.handleError(err), // maneja errores (ej. nombre duplicado 409 o vacio 400)
-      });
-    }
-  }
-
-  /** Elimina una categoria especifica previa confirmacion visual (Día 3 C) */
-  onDelete(id: string, event: Event) {
-    event.stopPropagation(); // evita que el click ejecute tambien goToProducts() al clickear el boton de borrar
-    
-    // confirm() es una alerta nativa del navegador que devuelve true si el usuario da click en aceptar
-    if (confirm('¿Estás seguro de que deseas eliminar esta categoría?')) {
-      this.categoryService.delete(id).subscribe({
-        next: () => {
-          this.loadCategories(); // recargamos la lista una vez borrada
+          this.loadCategories();
+          this.closeForm();
         },
         error: (err) => this.handleError(err),
       });
     }
   }
 
-  /** Maneja las respuestas de error HTTP (400, 404, 409) y las expone visualmente (Día 3 C) */
+  onDelete(id: string, event: Event) {
+    event.stopPropagation();
+
+    if (confirm('¿Estás seguro de que deseas eliminar esta categoría?')) {
+      this.categoryService.delete(id).subscribe({
+        next: () => {
+          this.loadCategories();
+        },
+        error: (err) => this.handleError(err),
+      });
+    }
+  }
+
   private handleError(err: any) {
     const status = err.status;
     const errorBody = err.error;
-    
+
     if (status === 409) {
       this.errorMessage.set('El nombre de la categoría ya existe en el sistema (Error 409).');
     } else if (status === 400) {
       const msg = errorBody?.message;
       this.errorMessage.set(
-        Array.isArray(msg) 
-          ? `Error de validación (400): ${msg.join(', ')}` 
+        Array.isArray(msg)
+          ? `Error de validación (400): ${msg.join(', ')}`
           : `Error de validación (400): ${msg || 'Campos requeridos vacíos'}`
       );
     } else if (status === 404) {
@@ -145,7 +134,6 @@ export class Categories implements OnInit {
     }
   }
 
-  /** Redirige al home filtrando por esta categoria */
   goToProducts(categoryId: string): void {
     this.router.navigate(['/'], { queryParams: { categoryId } });
   }

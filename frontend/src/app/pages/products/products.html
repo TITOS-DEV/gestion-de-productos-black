@@ -4,7 +4,6 @@
         <button class="btn btn-primary" type="button" (click)="openCreateForm()">+ Agregar Producto</button>
     </div>
 
-    <!-- Bloque para mostrar mensajes de error (400, 404, 409) (Día 3 C) -->
     @if (errorMessage()) {
         <div class="alert alert-danger">
             <span class="alert-text">{{ errorMessage() }}</span>
@@ -12,7 +11,6 @@
         </div>
     }
 
-    <!-- Formulario Modal para crear y editar productos (Día 2 C & Día 3 C) -->
     @if (showForm()) {
         <div class="modal-backdrop">
             <div class="modal-content">
@@ -61,7 +59,6 @@
     @if (isLoading()) {
         <app-loading />
     } @else {
-        <!-- Tabla de productos con @for y track (Día 2 C) -->
         <div class="table-responsive">
             <table class="products-table">
                 <thead>
@@ -78,7 +75,6 @@
                     @for (product of products(); track product.id) {
                         <tr>
                             <td>
-                                <!-- Muestra la primera imagen de la galeria o un placeholder si no tiene -->
                                 <img [src]="product.images[0]?.url || 'assets/placeholder.jpg'" 
                                      alt="{{ product.name }}" class="product-img-thumbnail" 
                                      onerror="this.src='https://placehold.co/100x100?text=No+Img'" />

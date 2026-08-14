@@ -6,7 +6,6 @@
         }
     </div>
 
-    <!-- Bloque para mostrar mensajes de error (400, 404, 409) -->
     @if (errorMessage()) {
         <div class="alert alert-danger">
             <span class="alert-text">{{ errorMessage() }}</span>
@@ -14,7 +13,6 @@
         </div>
     }
 
-    <!-- Formulario Modal para crear o editar categorias -->
     @if (showForm()) {
         <div class="modal-backdrop">
             <div class="modal-content">
@@ -42,7 +40,6 @@
     } @else if (categories().length === 0) {
         <p class="categories__empty">No hay categorías para mostrar.</p>
     } @else {
-        <!-- Listado de categorias usando @for y track (Día 2 C) -->
         <div class="categories__grid">
             @for (category of categories(); track category.id) {
                 <div class="categories__card" (click)="goToProducts(category.id)">
