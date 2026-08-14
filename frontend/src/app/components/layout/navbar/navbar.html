@@ -4,7 +4,9 @@
     </div>
         <a routerLink="/categories">Categorias</a>
         <a routerLink="/favorites">Favoritos</a>
-        <a routerLink="/admin/products">Productos</a>
+        @if (auth.isAdmin()) {
+          <a routerLink="/admin/products">Productos</a>
+        }
 
     <app-search-bar (search)="onSearch($event)" />
 

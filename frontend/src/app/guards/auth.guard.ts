@@ -8,13 +8,20 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const modal = inject(ModalService);
 
-  if (authService.isLoggedIn()) {
-    return true;
+  if (!authService.isLoggedIn()) {
+    // No está logueado: redirigir al home y abrir el modal de login
+    router.navigate(['/']);
+    modal.openLogin(state.url);
+    return false;
   }
 
-  // state.url es la ruta completa que el usuario intentaba visitar
-  // (ej. "/favorites"). La guardamos para volver ahí tras el login.
-  router.navigate(['/']);
-  modal.openLogin(state.url);
-  return false;
+  // Verificar si la ruta requiere el rol 'admin'
+  const requiredRole = route.data?.['role'];
+  if (requiredRole === 'admin' && !authService.isAdmin()) {
+    // Está logueado pero no es admin: redirigir al home
+    router.navigate(['/']);
+    return false;
+  }
+
+  return true;
 };

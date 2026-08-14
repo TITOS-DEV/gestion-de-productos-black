@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms'; // nos da el modulo necesario para
 import { CategoryService } from '../../services/category.service'; // inyectamos el servicio que maneja las llamadas a la API
 import { Category } from '../../models/category.model'; // importamos el modelo/interfaz de categoria
 import { Loading } from '../../components/ui/loading/loading'; // importamos el componente de pantalla de carga
+import { AuthService } from '../../services/auth.service'; // inyectamos el servicio de autenticacion para verificar el rol
 
 @Component({
   selector: 'app-categories',
@@ -14,6 +15,10 @@ import { Loading } from '../../components/ui/loading/loading'; // importamos el 
 export class Categories implements OnInit {
   private categoryService = inject(CategoryService); // inyectamos el servicio usando inject() (Angular 16+)
   private router = inject(Router); // inyectamos el router de Angular para redirigir
+  private authService = inject(AuthService); // inyectamos el servicio de autenticacion
+
+  /** Señal derivada: true si el usuario es admin */
+  isAdmin = this.authService.isAdmin;
 
   categories = signal<Category[]>([]); // signal que almacena la lista completa de categorias
   isLoading = signal(false); // signal para controlar si estamos cargando datos o no

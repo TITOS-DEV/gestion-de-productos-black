@@ -1,5 +1,5 @@
 // services/auth.service.ts
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
@@ -13,10 +13,19 @@ export class AuthService {
 
   /**
    * Señal reactiva del estado de sesión.
-   * Se inicializa leyendo si ya existe un token guardado (por ejemplo,
-   * si el usuario refresca la página sin haber cerrado sesión).
+   * Se inicializa leyendo si ya existe un token guardado.
    */
   isLoggedIn = signal<boolean>(!!localStorage.getItem('accessToken'));
+
+  /**
+   * Rol del usuario actual. Se lee del localStorage para persistir entre recargas.
+   */
+  private _role = signal<string>(localStorage.getItem('userRole') ?? 'user');
+
+  /**
+   * Señal derivada: true si el usuario autenticado es admin.
+   */
+  isAdmin = computed(() => this._role() === 'admin');
 
   /**
    * POST /auth/login
@@ -65,11 +74,17 @@ export class AuthService {
 
   private setSession(res: AuthResponse) {
     localStorage.setItem('accessToken', res.accessToken);
+    // Guardar el rol para persistirlo entre recargas de página
+    const role = res.user?.role ?? 'user';
+    localStorage.setItem('userRole', role);
+    this._role.set(role);
     this.isLoggedIn.set(true);
   }
 
   private clearSession() {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('userRole');
+    this._role.set('user');
     this.isLoggedIn.set(false);
     this.router.navigate(['/']);
   }

@@ -1,7 +1,9 @@
 <section class="categories">
     <div class="categories__header">
         <h1 class="categories__title">Categorías</h1>
-        <button class="btn btn-primary" type="button" (click)="openCreateForm()">+ Nueva Categoría</button>
+        @if (isAdmin()) {
+          <button class="btn btn-primary" type="button" (click)="openCreateForm()">+ Nueva Categoría</button>
+        }
     </div>
 
     <!-- Bloque para mostrar mensajes de error (400, 404, 409) -->
@@ -50,10 +52,12 @@
                             <span class="categories__description">{{ category.description }}</span>
                         }
                     </div>
-                    <div class="categories__card-actions">
-                        <button type="button" class="btn-action btn-edit" (click)="openEditForm(category, $event)">✏️ Editar</button>
-                        <button type="button" class="btn-action btn-delete" (click)="onDelete(category.id, $event)">🗑️ Borrar</button>
-                    </div>
+                    @if (isAdmin()) {
+                      <div class="categories__card-actions">
+                          <button type="button" class="btn-action btn-edit" (click)="openEditForm(category, $event)">✏️ Editar</button>
+                          <button type="button" class="btn-action btn-delete" (click)="onDelete(category.id, $event)">🗑️ Borrar</button>
+                      </div>
+                    }
                 </div>
             }
         </div>

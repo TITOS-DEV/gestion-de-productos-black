@@ -14,7 +14,7 @@ export const routes: Routes = [
   { path: 'products/:id', component: ProductDetail },
 
   // — Rutas protegidas —
-  { path: 'admin/products', component: Products, canActivate: [authGuard] },
+  { path: 'admin/products', component: Products, canActivate: [authGuard], data: { role: 'admin' } },
   { path: 'categories', component: Categories, canActivate: [authGuard] },
   { path: 'favorites', component: Favorites, canActivate: [authGuard] },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
